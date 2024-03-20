@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: todo-list
+  flyway:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/database
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format-sql: true
+
