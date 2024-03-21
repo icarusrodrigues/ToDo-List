@@ -4,9 +4,21 @@ CREATE TABLE public.tasks
     code text NOT NULL,
     title text NOT NULL,
     description text,
-    due_date text,
+    due_date timestamp,
     PRIMARY KEY (id)
 );
 
 ALTER TABLE IF EXISTS public.tasks
     OWNER to postgres;
+
+CREATE SEQUENCE public.task_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+ALTER SEQUENCE public.task_id_seq
+    OWNER TO postgres;
+
+ALTER TABLE public.tasks ALTER COLUMN id SET DEFAULT NEXTVAL('task_id_seq'::regclass);
