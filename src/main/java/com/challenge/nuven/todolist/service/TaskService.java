@@ -26,4 +26,19 @@ public class TaskService extends CrudService<TaskDto, Task> {
 
         return super.create(dto);
     }
+
+    @Override
+    public TaskDto update(Long id, TaskDto dto) {
+        TaskDto foundTask = super.find(id);
+        if (dto.getTitle() == null)
+            dto.setTitle(foundTask.getTitle());
+
+        if (dto.getDescription() == null)
+            dto.setDescription(foundTask.getDescription());
+
+        if (dto.getDueDate() == null)
+            dto.setDueDate(foundTask.getDueDate());
+
+        return super.update(id, dto);
+    }
 }
