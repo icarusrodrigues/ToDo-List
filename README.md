@@ -30,4 +30,4 @@ In the application there is also a [postman collection](https://github.com/icaru
 
 ## Tests
 
-To run the tests, open the test folder, right-click on the java folder, and select "Run 'Tests' in 'java'" if you use IntelliJ, or "Run Tests" if you use VS Code.
+To run unit tests, open the test folder, right-click on the java folder, and select "Run 'Tests' in 'java'" if you use IntelliJ, or "Run Tests" if you use VS Code.
