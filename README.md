@@ -27,3 +27,7 @@ And on each endpoint, you can see the type of response you might receive:
 ## Postman
 
 In the application there is also a [postman collection](https://github.com/icarusrodrigues/ToDo-List/blob/main/To_Do_List%20_Collection.postman_collection.json) with all endpoints.
+
+## Tests
+
+To run the tests, open the test folder, right-click on the java folder, and select "Run 'Tests' in 'java'" if you use IntelliJ, or "Run Tests" if you use VS Code.
