@@ -1,9 +1,8 @@
-package com.challenge.nuven.todolist.controller;
+package com.personal.project.todolist.controller;
 
-import com.challenge.nuven.todolist.dto.TaskDto;
-import com.challenge.nuven.todolist.model.EnumMessage;
-import com.challenge.nuven.todolist.model.Task;
-import com.challenge.nuven.todolist.service.TaskService;
+import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.model.EnumMessage;
+import com.personal.project.todolist.service.TaskService;
 import io.restassured.RestAssured;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;

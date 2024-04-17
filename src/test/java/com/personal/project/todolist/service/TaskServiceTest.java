@@ -1,9 +1,9 @@
-package com.challenge.nuven.todolist.service;
+package com.personal.project.todolist.service;
 
-import com.challenge.nuven.todolist.dto.TaskDto;
-import com.challenge.nuven.todolist.mapper.TaskMapper;
-import com.challenge.nuven.todolist.model.Task;
-import com.challenge.nuven.todolist.repository.TaskRepository;
+import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.mapper.TaskMapper;
+import com.personal.project.todolist.model.Task;
+import com.personal.project.todolist.repository.TaskRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

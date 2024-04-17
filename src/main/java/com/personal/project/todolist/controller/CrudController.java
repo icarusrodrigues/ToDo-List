@@ -1,7 +1,7 @@
-package com.challenge.nuven.todolist.controller;
+package com.personal.project.todolist.controller;
 
-import com.challenge.nuven.todolist.dto.BaseDto;
-import com.challenge.nuven.todolist.service.ICrudService;
+import com.personal.project.todolist.dto.BaseDto;
+import com.personal.project.todolist.service.ICrudService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;

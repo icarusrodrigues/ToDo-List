@@ -1,10 +1,10 @@
-package com.challenge.nuven.todolist.controller;
+package com.personal.project.todolist.controller;
 
-import com.challenge.nuven.todolist.dto.TaskDto;
-import com.challenge.nuven.todolist.model.EnumMessage;
-import com.challenge.nuven.todolist.response.ResponseHandler;
-import com.challenge.nuven.todolist.service.ICrudService;
-import com.challenge.nuven.todolist.service.TaskService;
+import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.model.EnumMessage;
+import com.personal.project.todolist.response.ResponseHandler;
+import com.personal.project.todolist.service.ICrudService;
+import com.personal.project.todolist.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

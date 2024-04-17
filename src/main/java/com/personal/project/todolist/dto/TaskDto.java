@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist.dto;
+package com.personal.project.todolist.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

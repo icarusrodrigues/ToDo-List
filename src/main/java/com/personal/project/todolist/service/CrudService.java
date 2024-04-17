@@ -1,10 +1,10 @@
-package com.challenge.nuven.todolist.service;
+package com.personal.project.todolist.service;
 
-import com.challenge.nuven.todolist.dto.BaseDto;
-import com.challenge.nuven.todolist.mapper.GenericMapper;
-import com.challenge.nuven.todolist.model.BaseEntity;
-import com.challenge.nuven.todolist.model.Task;
-import com.challenge.nuven.todolist.repository.IRepository;
+
+import com.personal.project.todolist.dto.BaseDto;
+import com.personal.project.todolist.mapper.GenericMapper;
+import com.personal.project.todolist.model.BaseEntity;
+import com.personal.project.todolist.repository.IRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

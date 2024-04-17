@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist.repository;
+package com.personal.project.todolist.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

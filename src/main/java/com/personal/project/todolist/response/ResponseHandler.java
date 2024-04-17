@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist.response;
+package com.personal.project.todolist.response;
 
 import org.springframework.http.ResponseEntity;
 

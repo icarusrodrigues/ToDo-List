@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist.dto;
+package com.personal.project.todolist.dto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

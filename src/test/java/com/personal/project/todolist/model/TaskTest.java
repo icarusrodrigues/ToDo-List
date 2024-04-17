@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist.model;
+package com.personal.project.todolist.model;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

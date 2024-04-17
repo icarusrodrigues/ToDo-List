@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist.mapper;
+package com.personal.project.todolist.mapper;
 
 public interface IMapper <T, E>{
     T toDto(E entity);

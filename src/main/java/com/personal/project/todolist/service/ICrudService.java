@@ -1,8 +1,7 @@
-package com.challenge.nuven.todolist.service;
+package com.personal.project.todolist.service;
 
-import com.challenge.nuven.todolist.dto.BaseDto;
+import com.personal.project.todolist.dto.BaseDto;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
 

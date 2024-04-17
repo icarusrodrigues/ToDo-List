@@ -1,9 +1,10 @@
-package com.challenge.nuven.todolist.service;
+package com.personal.project.todolist.service;
 
-import com.challenge.nuven.todolist.dto.TaskDto;
-import com.challenge.nuven.todolist.mapper.GenericMapper;
-import com.challenge.nuven.todolist.model.Task;
-import com.challenge.nuven.todolist.repository.IRepository;
+
+import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.mapper.GenericMapper;
+import com.personal.project.todolist.model.Task;
+import com.personal.project.todolist.repository.IRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

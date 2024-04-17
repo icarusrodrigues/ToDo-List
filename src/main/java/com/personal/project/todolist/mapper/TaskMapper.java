@@ -1,7 +1,7 @@
-package com.challenge.nuven.todolist.mapper;
+package com.personal.project.todolist.mapper;
 
-import com.challenge.nuven.todolist.dto.TaskDto;
-import com.challenge.nuven.todolist.model.Task;
+import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.model.Task;
 import org.springframework.stereotype.Component;
 
 @Component

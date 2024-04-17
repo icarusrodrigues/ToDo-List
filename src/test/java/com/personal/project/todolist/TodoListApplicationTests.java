@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist;
+package com.personal.project.todolist;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,7 +8,7 @@ class TodoListApplicationTests {
 
 	@Test
 	void testMain() {
-		TodoListApplication.main(new String[]{""});
+		com.challenge.nuven.todolist.TodoListApplication.main(new String[]{""});
 	}
 
 	@Test

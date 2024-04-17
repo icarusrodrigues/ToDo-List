@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist.model;
+package com.personal.project.todolist.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
