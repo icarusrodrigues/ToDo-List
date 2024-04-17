@@ -8,11 +8,11 @@
 		<version>3.2.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.challenge.nuven</groupId>
+	<groupId>com.personal.project</groupId>
 	<artifactId>todo-list</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Backend technical challenge</description>
+	<name>To-do List Tasks</name>
+	<description>Backend project for tasks management</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
