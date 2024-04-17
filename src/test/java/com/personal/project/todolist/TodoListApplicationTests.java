@@ -8,7 +8,7 @@ class TodoListApplicationTests {
 
 	@Test
 	void testMain() {
-		com.challenge.nuven.todolist.TodoListApplication.main(new String[]{""});
+		TodoListApplication.main(new String[]{""});
 	}
 
 	@Test

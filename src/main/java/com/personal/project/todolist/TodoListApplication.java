@@ -1,4 +1,4 @@
-package com.challenge.nuven.todolist;
+package com.personal.project.todolist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
