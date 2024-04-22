@@ -1,7 +1,8 @@
 package com.personal.project.todolist.dto;
 
 import com.personal.project.todolist.model.UserType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,6 @@
 package com.personal.project.todolist.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "user")
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -28,11 +26,11 @@ public class User extends BaseEntity<Long>{
     @NotBlank
     private String email;
 
-    @NotBlank
+    @Enumerated(EnumType.STRING)
     private UserType userType;
 
     private String team;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private List<Task> tasks;
 }
