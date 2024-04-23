@@ -6,9 +6,7 @@ import com.personal.project.todolist.mapper.GenericMapper;
 import com.personal.project.todolist.model.BaseEntity;
 import com.personal.project.todolist.repository.IRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

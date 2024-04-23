@@ -1,8 +1,7 @@
 package com.personal.project.todolist.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.personal.project.todolist.model.UserType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,6 +15,7 @@ public class UserDto extends BaseDto<Long> {
 
     String username;
 
+    @JsonIgnore
     String password;
 
     String email;

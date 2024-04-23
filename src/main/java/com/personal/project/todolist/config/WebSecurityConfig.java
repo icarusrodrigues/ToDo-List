@@ -1,6 +1,5 @@
 package com.personal.project.todolist.config;
 
-import com.personal.project.todolist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class WebConfig {
+public class WebSecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
