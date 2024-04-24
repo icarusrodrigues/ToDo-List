@@ -1,5 +1,6 @@
 package com.personal.project.todolist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class User extends BaseEntity<Long>{
     private String username;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @NotBlank

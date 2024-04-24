@@ -15,3 +15,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format-sql: true
+
+project:
+  jwtSecret: mySecretKey
+  jwtExpirationMs: 3600000

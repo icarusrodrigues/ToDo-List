@@ -43,7 +43,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/sign-up")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDto registerDto) {
         UserDto userDto = new UserDto();
 
