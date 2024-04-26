@@ -17,5 +17,5 @@ spring:
         format-sql: true
 
 project:
-  jwtSecret: mySecretKey
+  jwtSecret: qsafikhtnfvnxpgrsowxiytmmxunumrxpzjwlukvncfaknsrneuftixyeyzzmdahvwpfwyvnyrfmbtsvrkhpathnpsdwdldblxentxrghadyoaeqnqqaqkxilwuaindh
   jwtExpirationMs: 3600000

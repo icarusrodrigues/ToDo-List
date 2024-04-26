@@ -22,4 +22,8 @@ public class UserService extends CrudService<UserDto, User> {
     public UserDto findByUsername(String username){
         return userRepository.findByUsername(username).map(mapper::toDto).orElseThrow();
     }
+
+    public User getUserEntityFindByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow();
+    }
 }

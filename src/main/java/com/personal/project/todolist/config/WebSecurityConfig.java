@@ -1,5 +1,6 @@
 package com.personal.project.todolist.config;
 
+import com.personal.project.todolist.security.jwt.AuthEntryPointJwt;
 import com.personal.project.todolist.security.jwt.AuthTokenFilter;
 import com.personal.project.todolist.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +21,9 @@ public class WebSecurityConfig {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private AuthEntryPointJwt exceptionHandler;
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
@@ -34,16 +39,18 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
+            .exceptionHandling(exceptionHandlingConfigurer ->
+                    exceptionHandlingConfigurer.authenticationEntryPoint(exceptionHandler))
             .sessionManagement(
-                httpSecuritySessionManagementConfigurer ->
-                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                sessionManagementConfigurer ->
+                    sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth ->
                 auth
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/auth/**").permitAll()
                     .anyRequest().authenticated()
             );
 
-//        http.add
+        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -16,11 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("tasks")
 public class TaskController extends CrudController<TaskDto> {
@@ -57,6 +59,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
@@ -94,6 +97,7 @@ public class TaskController extends CrudController<TaskDto> {
                     )))
     })
     @Override
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> list(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
                                   @RequestParam(name = "property", defaultValue = "dueDate") String property) {
         try {
@@ -171,6 +175,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody TaskDto dto) {
         try {
             return ResponseHandler.generateResponse(super.update(id, dto), EnumMessage.PUT_MESSAGE.message());
@@ -198,6 +203,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @DeleteMapping(value = "{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         try {
             return ResponseHandler.generateResponse(super.delete(id), EnumMessage.DELETE_MESSAGE.message());
