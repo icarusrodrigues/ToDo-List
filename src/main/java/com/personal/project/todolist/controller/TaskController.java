@@ -65,7 +65,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -110,7 +110,7 @@ public class TaskController extends CrudController<TaskDto> {
                     )))
     })
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> list(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
                                   @RequestParam(name = "property", defaultValue = "dueDate") String property) {
         try {
@@ -140,7 +140,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @GetMapping("/my-tasks")
-    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
     public ResponseEntity<?> listTasksByUser() {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -172,7 +172,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
     public ResponseEntity<?> create(@RequestBody @Valid TaskDto dto){
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var foundUser = userService.findByUsername(user.getUsername());
@@ -221,7 +221,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody TaskDto dto) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -257,7 +257,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @DeleteMapping(value = "{id}")
-    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

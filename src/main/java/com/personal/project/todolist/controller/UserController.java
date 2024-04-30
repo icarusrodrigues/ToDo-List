@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("users")
 public class UserController extends CrudController<UserDto> {
@@ -66,7 +67,7 @@ public class UserController extends CrudController<UserDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
@@ -112,9 +113,9 @@ public class UserController extends CrudController<UserDto> {
                     )))
     })
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> list(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
-                                  @RequestParam(name = "property", defaultValue = "dueDate") String property) {
+                                  @RequestParam(name = "property", defaultValue = "id") String property) {
         try {
             return ResponseHandler.generateResponse(super.list(direction, property), EnumMessage.GET_MESSAGE.message());
         } catch (NoSuchElementException ignored) {
@@ -149,7 +150,7 @@ public class UserController extends CrudController<UserDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> create(@RequestBody @Valid UserDto dto){
         try {
             return ResponseHandler.generateResponse(super.create(dto), EnumMessage.POST_MESSAGE.message());
@@ -194,7 +195,7 @@ public class UserController extends CrudController<UserDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody UserDto dto) {
         try {
             return ResponseHandler.generateResponse(super.update(id, dto), EnumMessage.PUT_MESSAGE.message());
@@ -222,7 +223,7 @@ public class UserController extends CrudController<UserDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         try {
             return ResponseHandler.generateResponse(super.delete(id), EnumMessage.DELETE_MESSAGE.message());
