@@ -5,13 +5,18 @@ import com.personal.project.todolist.dto.TaskDto;
 import com.personal.project.todolist.mapper.GenericMapper;
 import com.personal.project.todolist.model.Task;
 import com.personal.project.todolist.repository.IRepository;
+import com.personal.project.todolist.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TaskService extends CrudService<TaskDto, Task> {
+
+    @Autowired
+    TaskRepository taskRepository;
 
     @Autowired
     public TaskService(GenericMapper<TaskDto, Task> mapper, IRepository<Task, Long> repository) {
@@ -40,5 +45,9 @@ public class TaskService extends CrudService<TaskDto, Task> {
             dto.setDueDate(foundTask.getDueDate());
 
         return super.update(id, dto);
+    }
+
+    public List<TaskDto> listAllByOwnerName(String ownerName) {
+        return taskRepository.findAllByOwnerName(ownerName).stream().map(mapper::toDto).toList();
     }
 }

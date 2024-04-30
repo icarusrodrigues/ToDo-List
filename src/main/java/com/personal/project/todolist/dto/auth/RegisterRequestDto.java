@@ -8,6 +8,4 @@ public class RegisterRequestDto {
     String username;
     String password;
     String email;
-    UserType userType;
-    String team;
 }

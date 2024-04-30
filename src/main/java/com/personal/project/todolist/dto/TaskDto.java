@@ -14,4 +14,5 @@ public class TaskDto extends BaseDto<Long>{
     String description;
     LocalDateTime dueDate;
     Long ownerId;
+    String ownerName;
 }

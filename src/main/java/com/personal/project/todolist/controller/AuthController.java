@@ -52,9 +52,9 @@ public class AuthController {
                 var token = jwtUtils.generateJwtToken(authentication);
 
                 var responseMap = new HashMap<String, String>();
-                responseMap.put("Username", foundUser.getUsername());
-                responseMap.put("Email", foundUser.getEmail());
-                responseMap.put("UserType", foundUser.getUserType().name());
+                responseMap.put("username", foundUser.getUsername());
+                responseMap.put("email", foundUser.getEmail());
+                responseMap.put("userType", foundUser.getUserType().name());
                 responseMap.put("token", token);
 
                 return ResponseEntity.ok(responseMap);
@@ -74,8 +74,7 @@ public class AuthController {
         userDto.setUsername(registerDto.getUsername());
         userDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         userDto.setEmail(registerDto.getEmail());
-        userDto.setUserType(UserType.valueOf(registerDto.getUserType().name()));
-        userDto.setTeam(registerDto.getTeam());
+        userDto.setUserType(UserType.PERSONAL);
         userDto.setTasks(new ArrayList<>());
 
         return ResponseEntity.ok(userService.create(userDto));

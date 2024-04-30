@@ -42,8 +42,13 @@ public enum EnumMessage {
         public String message() {
             return "Property not found in entity!";
         }
+    },
+    CANT_ACCESS_ENTITY_MESSAGE {
+        @Override
+        public String message() {
+            return "You are not the owner of this entity!";
+        }
     };
-
 
     public abstract String message();
 }

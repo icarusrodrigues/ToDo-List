@@ -29,4 +29,6 @@ public class Task extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
+
+    private String ownerName;
 }

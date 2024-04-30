@@ -22,6 +22,7 @@ public class TaskMapper extends GenericMapper<TaskDto, Task>{
         dto.setDescription(entity.getDescription());
         dto.setDueDate(entity.getDueDate());
         dto.setOwnerId(entity.getOwner().getId());
+        dto.setOwnerName(entity.getOwnerName());
 
         return dto;
     }
@@ -34,6 +35,7 @@ public class TaskMapper extends GenericMapper<TaskDto, Task>{
         entity.setDescription(dto.getDescription());
         entity.setDueDate(dto.getDueDate());
         entity.setOwner(userRepository.findById(dto.getOwnerId()).get());
+        entity.setOwnerName(dto.getOwnerName());
 
         return entity;
     }

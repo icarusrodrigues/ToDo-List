@@ -3,8 +3,10 @@ package com.personal.project.todolist.controller;
 import com.personal.project.todolist.dto.TaskDto;
 import com.personal.project.todolist.model.EnumMessage;
 import com.personal.project.todolist.response.ResponseHandler;
+import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.ICrudService;
 import com.personal.project.todolist.service.TaskService;
+import com.personal.project.todolist.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,9 @@ import java.util.NoSuchElementException;
 public class TaskController extends CrudController<TaskDto> {
     @Autowired
     private TaskService service;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public TaskController(ICrudService<TaskDto> service) {
@@ -59,10 +65,17 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         try {
-            return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
+            var foundTask = service.find(id);
+            if (foundTask.getOwnerName().equals(user.getUsername())) {
+                return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message());
+            }
 
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
@@ -97,7 +110,7 @@ public class TaskController extends CrudController<TaskDto> {
                     )))
     })
     @Override
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> list(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
                                   @RequestParam(name = "property", defaultValue = "dueDate") String property) {
         try {
@@ -106,6 +119,32 @@ public class TaskController extends CrudController<TaskDto> {
         } catch (PropertyReferenceException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
         }
+    }
+
+    @Operation(summary = "Get all Tasks from the logged in user", description = "Returns a list of all saved Tasks that belong to the logged in user.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Returns a list with all Tasks saved",
+                    content = @Content(examples = @ExampleObject(value = """
+                            {
+                                "data": [
+                                    {
+                                        "id": 0,
+                                        "title": "Some Task",
+                                        "description": "Some Description",
+                                        "dueDate": "2024-03-22T00:00:00"
+                                    }
+                                ],
+                                "message": "Data recovered successfully!",
+                                "status": 200
+                            }""")))
+    })
+    @GetMapping("/my-tasks")
+    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
+    public ResponseEntity<?> listTasksByUser() {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return ResponseHandler.generateResponse(ResponseEntity.ok().body(service.listAllByOwnerName(user.getUsername())), EnumMessage.GET_MESSAGE.message());
     }
 
     @Operation(summary = "Create Task", description = "Create a new Task in database.")
@@ -133,7 +172,14 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
+    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
     public ResponseEntity<?> create(@RequestBody @Valid TaskDto dto){
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
+
+        dto.setOwnerId(foundUser.getId());
+        dto.setOwnerName(foundUser.getUsername());
+
         try {
             return ResponseHandler.generateResponse(super.create(dto), EnumMessage.POST_MESSAGE.message());
 
@@ -175,10 +221,18 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody TaskDto dto) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         try {
-            return ResponseHandler.generateResponse(super.update(id, dto), EnumMessage.PUT_MESSAGE.message());
+            var foundTask = service.find(id);
+
+            if (foundTask.getOwnerName().equals(user.getUsername())) {
+                return ResponseHandler.generateResponse(super.update(id, dto), EnumMessage.PUT_MESSAGE.message());
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message());
+            }
 
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
@@ -203,11 +257,18 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @DeleteMapping(value = "{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PERSONAL') or hasRole('ADMIN') or hasRole('TEAM_MEMBER') or hasRole('ORGANIZATION_MEMBER')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        try {
-            return ResponseHandler.generateResponse(super.delete(id), EnumMessage.DELETE_MESSAGE.message());
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        try {
+            var foundTask = service.find(id);
+
+            if (foundTask.getOwnerName().equals(user.getUsername())) {
+                return ResponseHandler.generateResponse(super.delete(id), EnumMessage.DELETE_MESSAGE.message());
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message());
+            }
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
         }
