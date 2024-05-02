@@ -31,7 +31,11 @@ public class User extends BaseEntity<Long>{
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    private String team;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "users_teams",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
+    private List<Team> teams;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private List<Task> tasks;

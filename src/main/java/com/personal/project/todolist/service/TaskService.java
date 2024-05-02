@@ -6,6 +6,7 @@ import com.personal.project.todolist.mapper.GenericMapper;
 import com.personal.project.todolist.model.Task;
 import com.personal.project.todolist.repository.IRepository;
 import com.personal.project.todolist.repository.TaskRepository;
+import com.personal.project.todolist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class TaskService extends CrudService<TaskDto, Task> {
 
     @Autowired
     TaskRepository taskRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     public TaskService(GenericMapper<TaskDto, Task> mapper, IRepository<Task, Long> repository) {
@@ -43,6 +47,19 @@ public class TaskService extends CrudService<TaskDto, Task> {
 
         if (dto.getDueDate() == null)
             dto.setDueDate(foundTask.getDueDate());
+
+        if (dto.getOwnerId() == null) {
+            dto.setOwnerId(foundTask.getOwnerId());
+            dto.setOwnerName(foundTask.getOwnerName());
+
+        } else {
+            var foundUser = userRepository.findById(dto.getOwnerId());
+
+            if (foundUser.isPresent()) {
+                dto.setOwnerId(foundUser.get().getId());
+                dto.setOwnerName(foundUser.get().getUsername());
+            }
+        }
 
         return super.update(id, dto);
     }

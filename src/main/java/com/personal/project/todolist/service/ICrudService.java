@@ -5,7 +5,6 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-//@NoRepositoryBean
 public interface ICrudService <T extends BaseDto<Long>>{
     T find(Long id);
     List<T> findAll(Sort.Direction direction, String property);
