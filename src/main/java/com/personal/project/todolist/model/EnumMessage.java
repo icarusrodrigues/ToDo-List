@@ -48,6 +48,12 @@ public enum EnumMessage {
         public String message() {
             return "You are not the owner of this entity!";
         }
+    },
+    DONT_HAVE_PERMISSION_MESSAGE {
+        @Override
+        public String message() {
+            return "You don't have permission to do this!";
+        }
     };
 
     public abstract String message();

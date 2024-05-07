@@ -14,6 +14,8 @@ import java.util.List;
 public class TeamDto extends BaseDto<Long> {
     String name;
 
+    Long teamLeaderId;
+
     @JsonIgnore
     List<UserDto> members = new ArrayList<>();
 }

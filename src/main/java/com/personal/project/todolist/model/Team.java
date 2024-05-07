@@ -19,6 +19,10 @@ public class Team extends BaseEntity<Long> {
     @NotBlank
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "team_leader_id", referencedColumnName = "id")
+    private User teamLeader;
+
     @ManyToMany(mappedBy = "teams")
     private List<User> members;
 }

@@ -18,4 +18,19 @@ public class TeamService extends CrudService<TeamDto, Team> {
         super(mapper, repository);
     }
 
+    @Override
+    public TeamDto update(Long id, TeamDto dto) {
+        TeamDto foundTeam = super.find(id);
+
+        if (dto.getName() == null)
+            dto.setName(foundTeam.getName());
+
+        if (dto.getTeamLeaderId() == null)
+            dto.setTeamLeaderId(foundTeam.getTeamLeaderId());
+
+        if (dto.getMembers() == null)
+            dto.setMembers(foundTeam.getMembers());
+
+        return super.update(id, dto);
+    }
 }

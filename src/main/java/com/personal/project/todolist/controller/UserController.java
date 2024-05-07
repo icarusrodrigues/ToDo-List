@@ -71,8 +71,10 @@ public class UserController extends CrudController<UserDto> {
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
+
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
+
         }
     }
 
@@ -205,6 +207,7 @@ public class UserController extends CrudController<UserDto> {
 
         } catch (TransactionSystemException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CONSTRAINT_VIOLATION_MESSAGE.message());
+
         }
     }
 

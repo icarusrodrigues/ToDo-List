@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -23,8 +25,9 @@ public class UserDto extends BaseDto<Long> {
 
     String email;
 
-    UserType userType;
+    Set<UserType> userTypes = new HashSet<>();
 
+    @EqualsAndHashCode.Exclude
     List<TeamDto> teams = new ArrayList<>();
 
     List<TaskDto> tasks;

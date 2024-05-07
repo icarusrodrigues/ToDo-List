@@ -7,6 +7,9 @@ public enum UserType {
     //Personal user, to control your own tasks
     PERSONAL,
 
+    //Team leader, where you have access to all team features
+    TEAM_LEADER,
+
     //Team member, where you can see other team members' tasks and their details
     TEAM_MEMBER,
 

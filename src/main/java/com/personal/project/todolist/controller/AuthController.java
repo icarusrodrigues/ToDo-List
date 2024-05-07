@@ -54,7 +54,7 @@ public class AuthController {
                 var responseMap = new HashMap<String, String>();
                 responseMap.put("username", foundUser.getUsername());
                 responseMap.put("email", foundUser.getEmail());
-                responseMap.put("userType", foundUser.getUserType().name());
+                responseMap.put("userTypes", foundUser.getUserTypes().toString());
                 responseMap.put("token", token);
 
                 return ResponseEntity.ok(responseMap);
@@ -74,7 +74,7 @@ public class AuthController {
         userDto.setUsername(registerDto.getUsername());
         userDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         userDto.setEmail(registerDto.getEmail());
-        userDto.setUserType(UserType.PERSONAL);
+        userDto.getUserTypes().add(UserType.PERSONAL);
         userDto.setTasks(new ArrayList<>());
 
         return ResponseEntity.ok(userService.create(userDto));
