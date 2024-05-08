@@ -8,8 +8,10 @@ import com.personal.project.todolist.response.ResponseHandler;
 import com.personal.project.todolist.security.jwt.JwtUtils;
 import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.UserService;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -69,15 +71,20 @@ public class AuthController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDto registerDto) {
-        UserDto userDto = new UserDto();
+        try {
+            UserDto userDto = new UserDto();
 
-        userDto.setUsername(registerDto.getUsername());
-        userDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        userDto.setEmail(registerDto.getEmail());
-        userDto.getUserTypes().add(UserType.PERSONAL);
-        userDto.setTasks(new ArrayList<>());
+            userDto.setUsername(registerDto.getUsername());
+            userDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+            userDto.setEmail(registerDto.getEmail());
+            userDto.getUserTypes().add(UserType.PERSONAL);
+            userDto.setTasks(new ArrayList<>());
 
-        return ResponseEntity.ok(userService.create(userDto));
+            return ResponseEntity.ok(userService.create(userDto));
+
+        } catch (DataIntegrityViolationException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), "Username already in use!");
+        }
     }
 
     @PostMapping("/logout")

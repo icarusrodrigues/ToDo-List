@@ -1,11 +1,14 @@
 package com.personal.project.todolist.controller;
 
 import com.personal.project.todolist.dto.TeamDto;
+import com.personal.project.todolist.exceptions.MemberOnTeamException;
+import com.personal.project.todolist.exceptions.NotTeamMemberException;
 import com.personal.project.todolist.model.EnumMessage;
 import com.personal.project.todolist.model.UserType;
 import com.personal.project.todolist.response.ResponseHandler;
 import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.ICrudService;
+import com.personal.project.todolist.service.TeamService;
 import com.personal.project.todolist.service.UserService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ import java.util.NoSuchElementException;
 public class TeamController extends CrudController<TeamDto> {
 
     @Autowired
+    private TeamService service;
+
+    @Autowired
     private UserService userService;
 
     public TeamController(ICrudService<TeamDto> service) {
@@ -39,7 +45,7 @@ public class TeamController extends CrudController<TeamDto> {
         try {
             var foundTeam = service.find(id);
 
-            if (foundTeam.getTeamLeaderId().equals(loggedUser.getId()) || foundTeam.getMembers().contains(loggedUser)) {
+            if (foundTeam.getTeamLeaderId().equals(loggedUser.getId()) || foundTeam.getMembers().contains(loggedUser) || loggedUser.getUserTypes().contains(UserType.ADMIN)) {
                 return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
 
             } else {
@@ -87,7 +93,7 @@ public class TeamController extends CrudController<TeamDto> {
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEAM_LEADER')")
+    @PreAuthorize("hasAnyAuthority('TEAM_LEADER')")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody TeamDto dto) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var loggedUser = userService.findByUsername(user.getUsername());
@@ -113,7 +119,7 @@ public class TeamController extends CrudController<TeamDto> {
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEAM_LEADER')")
+    @PreAuthorize("hasAnyAuthority('TEAM_LEADER')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var loggedUser = userService.findByUsername(user.getUsername());
@@ -122,6 +128,8 @@ public class TeamController extends CrudController<TeamDto> {
             var foundTeam = service.find(id);
 
             if (foundTeam.getTeamLeaderId().equals(loggedUser.getId())) {
+                service.removeTeamsFromUsers(foundTeam);
+
                 return ResponseHandler.generateResponse(super.delete(id), EnumMessage.DELETE_MESSAGE.message());
 
             } else {
@@ -135,8 +143,8 @@ public class TeamController extends CrudController<TeamDto> {
     }
 
     @PostMapping("/add/{teamId}/{memberId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEAM_LEADER')")
-    public ResponseEntity<?> addMemberToTeam(@PathVariable(name = "teamId") Long teamId,
+    @PreAuthorize("hasAnyAuthority('TEAM_LEADER')")
+    public ResponseEntity<?> addMember(@PathVariable(name = "teamId") Long teamId,
                                              @PathVariable(name = "memberId") Long memberId) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var loggedUser = userService.findByUsername(user.getUsername());
@@ -145,26 +153,77 @@ public class TeamController extends CrudController<TeamDto> {
             var foundTeam = service.find(teamId);
 
             if (foundTeam.getTeamLeaderId().equals(loggedUser.getId())){
-                try {
-                    var foundMember = userService.find(memberId);
+                service.addMemberToTeam(memberId, foundTeam);
 
-                    foundMember.getTeams().add(foundTeam);
-                    foundMember.getUserTypes().add(UserType.TEAM_MEMBER);
-                    userService.update(foundMember.getId(), foundMember);
-
-                    return ResponseEntity.ok().build();
-                } catch (NoSuchElementException e){
-                    return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
-                }
+                return ResponseHandler.generateResponse(ResponseEntity.ok().build(), EnumMessage.PUT_MESSAGE.message());
 
             } else {
                 return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
 
             }
 
+        } catch (NoSuchElementException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
+
+        } catch (MemberOnTeamException e) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), e.getMessage());
+
+        }
+    }
+
+    @PutMapping("/change-leader/{teamId}/{newLeaderId}")
+    @PreAuthorize("hasAnyAuthority('TEAM_LEADER')")
+    public ResponseEntity<?> changeLeader(@PathVariable(name = "teamId") Long teamId,
+                                              @PathVariable(name = "newLeaderId") Long newLeaderId) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var loggedUser = userService.findByUsername(user.getUsername());
+
+        try {
+            var foundTeam = service.find(teamId);
+
+            if (foundTeam.getTeamLeaderId().equals(loggedUser.getId())) {
+                return ResponseHandler.generateResponse(ResponseEntity.ok(service.changeTeamLeader(newLeaderId, loggedUser, foundTeam)), EnumMessage.PUT_MESSAGE.message());
+
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
+
+            }
         } catch (NoSuchElementException e) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
 
+        } catch (NotTeamMemberException e) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), e.getMessage());
+        }
+    }
+
+    @PutMapping("/expel/{teamId}/{memberId}")
+    @PreAuthorize("hasAnyAuthority('TEAM_LEADER')")
+    public ResponseEntity<?> expelMember(@PathVariable(name = "teamId") Long teamId,
+                                         @PathVariable(name = "memberId") Long memberId) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var loggedUser = userService.findByUsername(user.getUsername());
+
+        if (loggedUser.getId().equals(memberId)) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), "You are the team leader, change the leader of this team first.");
+        }
+
+        try {
+            var foundTeam = service.find(teamId);
+
+            if (foundTeam.getTeamLeaderId().equals(loggedUser.getId())) {
+                service.expelMemberFromTeam(memberId, foundTeam);
+
+                return ResponseHandler.generateResponse(ResponseEntity.noContent().build(), EnumMessage.PUT_MESSAGE.message());
+
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
+            }
+
+        } catch (NoSuchElementException e) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
+
+        } catch (NotTeamMemberException e) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), e.getMessage());
         }
     }
 }

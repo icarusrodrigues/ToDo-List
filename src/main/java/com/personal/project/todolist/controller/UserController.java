@@ -1,9 +1,12 @@
 package com.personal.project.todolist.controller;
 
 import com.personal.project.todolist.dto.UserDto;
+import com.personal.project.todolist.exceptions.MemberOnTeamException;
 import com.personal.project.todolist.model.EnumMessage;
 import com.personal.project.todolist.response.ResponseHandler;
+import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.ICrudService;
+import com.personal.project.todolist.service.TeamService;
 import com.personal.project.todolist.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,9 +16,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +32,9 @@ import java.util.NoSuchElementException;
 public class UserController extends CrudController<UserDto> {
     @Autowired
     private UserService service;
+
+    @Autowired
+    private TeamService teamService;
 
     @Autowired
     public UserController(ICrudService<UserDto> service) {
@@ -233,6 +241,9 @@ public class UserController extends CrudController<UserDto> {
 
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
+
+        } catch (DataIntegrityViolationException ignored){
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), "The user is a team leader, change the leader(s) of that team(s) first.");
         }
     }
 }

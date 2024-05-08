@@ -7,127 +7,736 @@
 	},
 	"item": [
 		{
-			"name": "Get All Tasks",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/tasks",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"tasks"
-					],
-					"query": [
-						{
-							"key": "direction",
-							"value": null,
-							"disabled": true
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"teste\",\r\n    \"password\": \"teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "property",
-							"value": null,
-							"disabled": true
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Task By ID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/tasks/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"tasks",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Task",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"Some Task\",\r\n    \"description\": \"some description\",\r\n    \"dueDate\": \"2024-03-22T00:00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/tasks",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Task",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"Some Task\",\r\n    \"description\": \"Some Description\",\r\n    \"dueDate\": \"2024-03-22T00:00:00\"\r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNDQ5MDAyMywiZXhwIjoxNzE0NDkzNjIzfQ.X5kUTO-Y--MNeFtPguwNLgi--pG9ZzbDFRkSYaU9gud5jz0uKCjzrTfFGw4iyqp1APRByx06C43Tqk37D7WqVw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"logout"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/tasks/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"tasks",
-						"1"
-					]
+				{
+					"name": "Sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"teste\",\r\n    \"password\": \"teste\",\r\n    \"email\": \"teste@teste.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/sign-up",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Delete Task",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/tasks/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"tasks",
-						"1"
-					]
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTAzNDYwMCwiZXhwIjoxNzE1MDM4MjAwfQ.e3-HDj79NTo5WU4C_UPqqtu0e1Dkt9VcOY8rl6Yvr9PYg3aUYq4D5zl2DpjIvg4aGBDE3zNBVWboHj1cnzXDnA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "direction",
+									"value": "DESC",
+									"disabled": true
+								},
+								{
+									"key": "property",
+									"value": "id",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Tasks of the logged User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJHYWJpIiwiaWF0IjoxNzE0NTMzMjU5LCJleHAiOjE3MTQ1MzY4NTl9.vg6a4zzPwoKikQmtw5eTWXMo8u1ZWa4ppaZtUQ12_G5YuuadezRR1ALjDSDmk-qShdDe-qmZ7827cxDaGnslFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/tasks/my-tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"my-tasks"
+							],
+							"query": [
+								{
+									"key": "direction",
+									"value": "DESC",
+									"disabled": true
+								},
+								{
+									"key": "property",
+									"value": "id",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBbmFraW4iLCJpYXQiOjE3MTQ0MzYxNDUsImV4cCI6MTcxNDQzOTc0NX0.fBjcOukxkCcjrg52mJHBrgqYQDLDrIK6chqw0cc4R-eUJFK0vPtkUGMt-sBLuS6Ik6nt0SQlCW_eKsvc7UiBgQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/tasks/0",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNDU3Mjg4NSwiZXhwIjoxNzE0NTc2NDg1fQ.GvtM-SvsgVP0jnMETru3NcsY_p6QEPTbcCnhNVF14UP7njtu_jIG4xaY9FjV9ERilVFWF8aQPYzqfKuJ6T7xFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Some Task\",\r\n    \"description\": \"some description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNDUzMjU5NywiZXhwIjoxNzE0NTM2MTk3fQ.iGkebKspjevxY3K6EusWFcuwV0KZpu_dHCk7GDZbk98aNUU_bKYIIcBGlUAw0vOsG3tZQLNJJyhUPeo-mBnC4w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Some Task\",\r\n    \"description\": \"Some Description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/tasks/36",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"36"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNDUzMzI5MSwiZXhwIjoxNzE0NTM2ODkxfQ.JhXpAFeVcX-NMXAfx9R5yGz7AjxpWjIkMA0DKg-dYQzzMi6Cfl2r1ObpMPE8NKxlkQED694Uc7RfnfcEUn5h4g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/tasks/0",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"0"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTE5MjE0MSwiZXhwIjoxNzE1MTk1NzQxfQ.K_am01rj4kQZIk7VgwfS_m3VA-HaWxMWJWGRRYfRW-Rb1PvzBJ9MWQXl_AaSP3NHFf-3IW1UtKCTEdjEuwtIrQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTEyMTQ1MCwiZXhwIjoxNzE1MTI1MDUwfQ.kUA8IjoWWsR-h-7zAuaJrYx5yIbNoktzxCpmUyFLSowgfc6wFAeXVUKSLgcn0z46nEc2sP-byGpCLznmE-owHQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/0",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0ZSIsImlhdCI6MTcxNTA0NTM1NSwiZXhwIjoxNzE1MDQ4OTU1fQ.KuSA7CheL8s9W4zAQ3V32y_rl2K4tF68ghkVQpkMjob74oHfuwfgi6vsXc1kzCSttg3sGx4sGQXtvv5UlsC4nw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"Some username\",\r\n  \"password\": \"Some password\",\r\n  \"email\": \"some@email.com\",\r\n  \"userTypes\": [],\r\n  \"teams\": [],\r\n  \"tasks\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"Some username\",\r\n  \"password\": \"Some password\",\r\n  \"email\": \"some@email.com\",\r\n  \"userTypes\": [],\r\n  \"teams\": [],\r\n  \"tasks\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/0",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTA0MzU0MywiZXhwIjoxNzE1MDQ3MTQzfQ.RMA7IYMM-sgp_NdfRfa_1w9EWILRZ2qemRUPrKNh-HAZDRVPqlYaeLhuF6QX6Xhka3NcZBuiKXXL3C2L6924CA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/0",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "Get All Teams",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTEyOTE4MCwiZXhwIjoxNzE1MTMyNzgwfQ.WVmhJbnliBcGLLjpM5dsyRN2YzxtutoymiEq1tqrXk03OTU_wSMBYDCORH5SuoHFBfwfaKAP2F9AdsDkfKkleQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/teams",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJHYWJpIiwiaWF0IjoxNzE1MDQxNDQxLCJleHAiOjE3MTUwNDUwNDF9.WcNkkqzsQEIMkVMt0XE9ZAqwb8Tbj6EmDG5E2EHe0mn5p3qsUw5HtuvQBKFhzE2xLC6i0vnmAs8g7-dmwlngaA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/teams/0",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0ZSIsImlhdCI6MTcxNTEyMzk1MCwiZXhwIjoxNzE1MTI3NTUwfQ.Ifa_q605PygKSugRLOHOpGjgz7N2XYcJKpt3VWQ4Cn_YogtJoqvL9PHyeCRht8vNkusMokyKd3nrukFMHkzTkw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Some name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/teams",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Member to Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTE5MjE0MSwiZXhwIjoxNzE1MTk1NzQxfQ.K_am01rj4kQZIk7VgwfS_m3VA-HaWxMWJWGRRYfRW-Rb1PvzBJ9MWQXl_AaSP3NHFf-3IW1UtKCTEdjEuwtIrQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teams/add/0/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"add",
+								"0",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Expel Member from Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTE5MjE0MSwiZXhwIjoxNzE1MTk1NzQxfQ.K_am01rj4kQZIk7VgwfS_m3VA-HaWxMWJWGRRYfRW-Rb1PvzBJ9MWQXl_AaSP3NHFf-3IW1UtKCTEdjEuwtIrQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teams/expel/0/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"expel",
+								"0",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTEyMTQ1MCwiZXhwIjoxNzE1MTI1MDUwfQ.kUA8IjoWWsR-h-7zAuaJrYx5yIbNoktzxCpmUyFLSowgfc6wFAeXVUKSLgcn0z46nEc2sP-byGpCLznmE-owHQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Some Team\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/teams/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Leader of Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJHYWJpIiwiaWF0IjoxNzE1MTgyNzE0LCJleHAiOjE3MTUxODYzMTR9.UNngKfwadfpvMsb_htbD72IlCwv8gPZqiSQvJLWs2A2WcKvc2TPgukuiceROzlveIuowKHbfI7IA1wuqEz7_nA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teams/change-leader/0/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"change-leader",
+								"0",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0ZSIsImlhdCI6MTcxNTEyOTQ0MSwiZXhwIjoxNzE1MTMzMDQxfQ.cTeOciG6h7YNqhTIZuYxa5Nhebdwm80n41es92hC8pWfHTFrwoCrE2P8V6kIetN4EJPd2_2k_fjgLR3En0_QxA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teams/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
