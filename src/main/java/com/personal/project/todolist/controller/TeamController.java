@@ -81,7 +81,6 @@ public class TeamController extends CrudController<TeamDto> {
             dto.setTeamLeaderId(loggedUser.getId());
             var savedTeam = service.create(dto);
 
-            loggedUser.getTeams().add(savedTeam);
             loggedUser.getUserTypes().add(UserType.TEAM_LEADER);
             userService.update(loggedUser.getId(), loggedUser);
 
@@ -202,10 +201,6 @@ public class TeamController extends CrudController<TeamDto> {
                                          @PathVariable(name = "memberId") Long memberId) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var loggedUser = userService.findByUsername(user.getUsername());
-
-        if (loggedUser.getId().equals(memberId)) {
-            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), "You are the team leader, change the leader of this team first.");
-        }
 
         try {
             var foundTeam = service.find(teamId);

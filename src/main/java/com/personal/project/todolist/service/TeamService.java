@@ -9,14 +9,15 @@ import com.personal.project.todolist.model.Team;
 import com.personal.project.todolist.model.UserType;
 import com.personal.project.todolist.repository.IRepository;
 import com.personal.project.todolist.repository.TeamRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class TeamService extends CrudService<TeamDto, Team> {
 
+    private static final Logger log = LoggerFactory.getLogger(TeamService.class);
     @Autowired
     private TeamRepository repository;
 
@@ -63,13 +64,17 @@ public class TeamService extends CrudService<TeamDto, Team> {
         }
 
         foundNewLeader.getUserTypes().add(UserType.TEAM_LEADER);
-        loggedUser.getUserTypes().add(UserType.TEAM_MEMBER);
+        foundNewLeader.getTeams().remove(teamDto);
 
-        if (!isMember(foundNewLeader, teamDto.getId())){
+        if (foundNewLeader.getTeams().isEmpty()){
             foundNewLeader.getUserTypes().remove(UserType.TEAM_MEMBER);
         }
 
-        if (!isLeader(loggedUser, teamDto.getId())) {
+        loggedUser.getUserTypes().add(UserType.TEAM_MEMBER);
+        loggedUser.getLedTeams().remove(teamDto);
+        loggedUser.getTeams().add(teamDto);
+
+        if (loggedUser.getLedTeams().isEmpty()) {
             loggedUser.getUserTypes().remove(UserType.TEAM_LEADER);
         }
 
@@ -85,13 +90,8 @@ public class TeamService extends CrudService<TeamDto, Team> {
         teamDto.getMembers().forEach(member -> {
             member.getTeams().remove(teamDto);
 
-            if (member.getId().equals(teamDto.getTeamLeaderId())) {
-                if (!isLeader(member, teamDto.getId()))
-                    member.getUserTypes().remove(UserType.TEAM_LEADER);
-            }else {
-                if (member.getTeams().isEmpty())
-                    member.getUserTypes().remove(UserType.TEAM_MEMBER);
-            }
+            if (member.getTeams().isEmpty())
+                member.getUserTypes().remove(UserType.TEAM_MEMBER);
 
             userService.update(member.getId(), member);
         });
@@ -111,27 +111,5 @@ public class TeamService extends CrudService<TeamDto, Team> {
         }
 
         userService.update(foundMember.getId(), foundMember);
-    }
-
-    private Boolean isMember(UserDto userDto, Long teamId) {
-        AtomicReference<Boolean> result = new AtomicReference<>(false);
-
-        userDto.getTeams().forEach(team -> {
-            if (!team.getTeamLeaderId().equals(userDto.getId()) && !team.getId().equals(teamId))
-                result.set(true);
-        });
-
-        return result.get();
-    }
-
-    private Boolean isLeader(UserDto userDto, Long teamId) {
-        AtomicReference<Boolean> result = new AtomicReference<>(false);
-
-        userDto.getTeams().forEach(team -> {
-            if (team.getTeamLeaderId().equals(userDto.getId()) && !team.getId().equals(teamId))
-                result.set(true);
-        });
-
-        return result.get();
     }
 }

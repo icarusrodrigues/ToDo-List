@@ -19,7 +19,7 @@ public class Team extends BaseEntity<Long> {
     @NotBlank
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_leader_id", referencedColumnName = "id")
     private User teamLeader;
 

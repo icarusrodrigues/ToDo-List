@@ -28,6 +28,9 @@ public class UserDto extends BaseDto<Long> {
     Set<UserType> userTypes = new HashSet<>();
 
     @EqualsAndHashCode.Exclude
+    List<TeamDto> ledTeams = new ArrayList<>();
+
+    @EqualsAndHashCode.Exclude
     List<TeamDto> teams = new ArrayList<>();
 
     List<TaskDto> tasks;
