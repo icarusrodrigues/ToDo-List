@@ -1,10 +1,8 @@
 package com.personal.project.todolist.controller;
 
 import com.personal.project.todolist.dto.UserDto;
-import com.personal.project.todolist.exceptions.MemberOnTeamException;
 import com.personal.project.todolist.model.EnumMessage;
 import com.personal.project.todolist.response.ResponseHandler;
-import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.ICrudService;
 import com.personal.project.todolist.service.TeamService;
 import com.personal.project.todolist.service.UserService;
@@ -20,7 +18,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,10 +76,8 @@ public class UserController extends CrudController<UserDto> {
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
-
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
-
         }
     }
 
@@ -164,7 +159,6 @@ public class UserController extends CrudController<UserDto> {
     public ResponseEntity<?> create(@RequestBody @Valid UserDto dto){
         try {
             return ResponseHandler.generateResponse(super.create(dto), EnumMessage.POST_MESSAGE.message());
-
         } catch (ConstraintViolationException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CONSTRAINT_VIOLATION_MESSAGE.message());
         }
@@ -209,13 +203,10 @@ public class UserController extends CrudController<UserDto> {
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody UserDto dto) {
         try {
             return ResponseHandler.generateResponse(super.update(id, dto), EnumMessage.PUT_MESSAGE.message());
-
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
-
         } catch (TransactionSystemException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CONSTRAINT_VIOLATION_MESSAGE.message());
-
         }
     }
 

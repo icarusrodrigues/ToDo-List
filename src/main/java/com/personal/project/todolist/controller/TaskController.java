@@ -65,12 +65,13 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
             var foundTask = service.find(id);
+
             if (foundTask.getOwnerName().equals(user.getUsername())) {
                 return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
             } else {
@@ -115,7 +116,6 @@ public class TaskController extends CrudController<TaskDto> {
                                   @RequestParam(name = "property", defaultValue = "dueDate") String property) {
         try {
             return ResponseHandler.generateResponse(super.list(direction, property), EnumMessage.GET_MESSAGE.message());
-
         } catch (PropertyReferenceException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
         }
@@ -140,7 +140,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @GetMapping("/my-tasks")
-    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> listTasksByUser() {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -172,7 +172,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> create(@RequestBody @Valid TaskDto dto){
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var foundUser = userService.findByUsername(user.getUsername());
@@ -221,7 +221,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @Override
-    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody TaskDto dto) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -236,7 +236,6 @@ public class TaskController extends CrudController<TaskDto> {
 
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
-
         } catch (TransactionSystemException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CONSTRAINT_VIOLATION_MESSAGE.message());
         }
@@ -257,7 +256,7 @@ public class TaskController extends CrudController<TaskDto> {
                             }""")))
     })
     @DeleteMapping(value = "{id}")
-    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_MEMBER', 'ORGANIZATION_MEMBER')")
+    @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

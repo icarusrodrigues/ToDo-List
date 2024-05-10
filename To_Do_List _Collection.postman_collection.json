@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"teste\",\r\n    \"password\": \"teste\"\r\n}",
+							"raw": "{\r\n    \"username\": \"Icaro\",\r\n    \"password\": \"26/11\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -329,7 +329,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTE5MjE0MSwiZXhwIjoxNzE1MTk1NzQxfQ.K_am01rj4kQZIk7VgwfS_m3VA-HaWxMWJWGRRYfRW-Rb1PvzBJ9MWQXl_AaSP3NHFf-3IW1UtKCTEdjEuwtIrQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjYyMiwiZXhwIjoxNzE1MzA2MjIyfQ.wWm9-dfSjgquzR2SjRzMqQ9xY7mSRve2RmfYskRUe5os6GQ5-kWgKwsvvla-_O6otGDbzD1vu4GLjqKAc6OhwA",
 									"type": "string"
 								}
 							]
@@ -357,7 +357,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTEyMTQ1MCwiZXhwIjoxNzE1MTI1MDUwfQ.kUA8IjoWWsR-h-7zAuaJrYx5yIbNoktzxCpmUyFLSowgfc6wFAeXVUKSLgcn0z46nEc2sP-byGpCLznmE-owHQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTIxODk3NSwiZXhwIjoxNzE1MjIyNTc1fQ.SfC9Ay_kdw4B1-nBv7fseHCezsNDrIA93wCxEimazZWNWp5yXKEeirQrU3P_qsTmp5OcJWYeNUEXyGRMXP6Eqg",
 									"type": "string"
 								}
 							]
@@ -485,7 +485,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTEyOTE4MCwiZXhwIjoxNzE1MTMyNzgwfQ.WVmhJbnliBcGLLjpM5dsyRN2YzxtutoymiEq1tqrXk03OTU_wSMBYDCORH5SuoHFBfwfaKAP2F9AdsDkfKkleQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjYyMiwiZXhwIjoxNzE1MzA2MjIyfQ.wWm9-dfSjgquzR2SjRzMqQ9xY7mSRve2RmfYskRUe5os6GQ5-kWgKwsvvla-_O6otGDbzD1vu4GLjqKAc6OhwA",
 									"type": "string"
 								}
 							]
@@ -500,6 +500,94 @@
 							"port": "8080",
 							"path": [
 								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All  Led Teams of the logged User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwNDkzMSwiZXhwIjoxNzE1MzA4NTMxfQ.uGzn9vum1-tFta-CpwfxoSLUkg2KCki1eUEYvk9n42LWU1y1GCmUZUBHD83OSAkk5lmURfgu9uOtGvM5l3_VqQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/teams/my-teams/member",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"my-teams",
+								"member"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Managed Teams of the logged User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjYyMiwiZXhwIjoxNzE1MzA2MjIyfQ.wWm9-dfSjgquzR2SjRzMqQ9xY7mSRve2RmfYskRUe5os6GQ5-kWgKwsvvla-_O6otGDbzD1vu4GLjqKAc6OhwA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/teams/my-teams",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"my-teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Member Teams of the logged User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjYyMiwiZXhwIjoxNzE1MzA2MjIyfQ.wWm9-dfSjgquzR2SjRzMqQ9xY7mSRve2RmfYskRUe5os6GQ5-kWgKwsvvla-_O6otGDbzD1vu4GLjqKAc6OhwA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/teams/my-teams",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"my-teams"
 							]
 						}
 					},
@@ -542,7 +630,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0ZSIsImlhdCI6MTcxNTEyMzk1MCwiZXhwIjoxNzE1MTI3NTUwfQ.Ifa_q605PygKSugRLOHOpGjgz7N2XYcJKpt3VWQ4Cn_YogtJoqvL9PHyeCRht8vNkusMokyKd3nrukFMHkzTkw",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjkxMSwiZXhwIjoxNzE1MzA2NTExfQ.EpDOH67SEa0znHB9flmaW1vNhyBH7Y9lEhEfR-pzZmf3wZ7PjHHvYIxLdxICvr-hhUvwn-iIYDLqizYE_IT8sQ",
 									"type": "string"
 								}
 							]
@@ -579,7 +667,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTE5MjE0MSwiZXhwIjoxNzE1MTk1NzQxfQ.K_am01rj4kQZIk7VgwfS_m3VA-HaWxMWJWGRRYfRW-Rb1PvzBJ9MWQXl_AaSP3NHFf-3IW1UtKCTEdjEuwtIrQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjkxMSwiZXhwIjoxNzE1MzA2NTExfQ.EpDOH67SEa0znHB9flmaW1vNhyBH7Y9lEhEfR-pzZmf3wZ7PjHHvYIxLdxICvr-hhUvwn-iIYDLqizYE_IT8sQ",
 									"type": "string"
 								}
 							]
@@ -587,7 +675,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/teams/add/0/1",
+							"raw": "http://localhost:8080/teams/add/member/13/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -596,30 +684,31 @@
 							"path": [
 								"teams",
 								"add",
-								"0",
-								"1"
+								"member",
+								"13",
+								"4"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Expel Member from Team",
+					"name": "Add Admin to Team",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTE5MjE0MSwiZXhwIjoxNzE1MTk1NzQxfQ.K_am01rj4kQZIk7VgwfS_m3VA-HaWxMWJWGRRYfRW-Rb1PvzBJ9MWQXl_AaSP3NHFf-3IW1UtKCTEdjEuwtIrQ",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjkxMSwiZXhwIjoxNzE1MzA2NTExfQ.EpDOH67SEa0znHB9flmaW1vNhyBH7Y9lEhEfR-pzZmf3wZ7PjHHvYIxLdxICvr-hhUvwn-iIYDLqizYE_IT8sQ",
 									"type": "string"
 								}
 							]
 						},
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/teams/expel/0/1",
+							"raw": "http://localhost:8080/teams/add/admin/13/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -627,9 +716,10 @@
 							"port": "8080",
 							"path": [
 								"teams",
-								"expel",
-								"0",
-								"1"
+								"add",
+								"admin",
+								"13",
+								"4"
 							]
 						}
 					},
@@ -675,14 +765,14 @@
 					"response": []
 				},
 				{
-					"name": "Change Leader of Team",
+					"name": "Expel Member from Team",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJHYWJpIiwiaWF0IjoxNzE1MTgyNzE0LCJleHAiOjE3MTUxODYzMTR9.UNngKfwadfpvMsb_htbD72IlCwv8gPZqiSQvJLWs2A2WcKvc2TPgukuiceROzlveIuowKHbfI7IA1wuqEz7_nA",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTE5MjE0MSwiZXhwIjoxNzE1MTk1NzQxfQ.K_am01rj4kQZIk7VgwfS_m3VA-HaWxMWJWGRRYfRW-Rb1PvzBJ9MWQXl_AaSP3NHFf-3IW1UtKCTEdjEuwtIrQ",
 									"type": "string"
 								}
 							]
@@ -690,7 +780,73 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/teams/change-leader/0/1",
+							"raw": "http://localhost:8080/teams/expel/member/0/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"expel",
+								"member",
+								"0",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Expel Admin from Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTMwMjkxMSwiZXhwIjoxNzE1MzA2NTExfQ.EpDOH67SEa0znHB9flmaW1vNhyBH7Y9lEhEfR-pzZmf3wZ7PjHHvYIxLdxICvr-hhUvwn-iIYDLqizYE_IT8sQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teams/expel/admin/13/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teams",
+								"expel",
+								"admin",
+								"13",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Leader of Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJY2FybyIsImlhdCI6MTcxNTIyMjAwMSwiZXhwIjoxNzE1MjI1NjAxfQ.zQV8A8Ftd6q0ohYVLdnmJFDux6qVAG94SawD3RM2KVDONhTgx49_8ckiKhWoKJ96rKjJwgdo5AFuFmkwgGm1Kw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teams/change-leader/8/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -699,8 +855,8 @@
 							"path": [
 								"teams",
 								"change-leader",
-								"0",
-								"1"
+								"8",
+								"4"
 							]
 						}
 					},

@@ -23,6 +23,9 @@ public class Team extends BaseEntity<Long> {
     @JoinColumn(name = "team_leader_id", referencedColumnName = "id")
     private User teamLeader;
 
+    @ManyToMany(mappedBy = "managedTeams")
+    private List<User> admins;
+
     @ManyToMany(mappedBy = "teams")
     private List<User> members;
 }
