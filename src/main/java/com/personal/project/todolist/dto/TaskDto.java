@@ -1,5 +1,6 @@
 package com.personal.project.todolist.dto;
 
+import com.personal.project.todolist.model.TaskType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ public class TaskDto extends BaseDto<Long>{
     String title;
     String description;
     LocalDateTime dueDate;
+    TaskType taskType;
+    Long createdById;
     Long ownerId;
-    String ownerName;
+    Long teamId;
 }

@@ -2,7 +2,9 @@ package com.personal.project.todolist.service;
 
 
 import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.dto.UserDto;
 import com.personal.project.todolist.mapper.GenericMapper;
+import com.personal.project.todolist.mapper.UserMapper;
 import com.personal.project.todolist.model.Task;
 import com.personal.project.todolist.repository.IRepository;
 import com.personal.project.todolist.repository.TaskRepository;
@@ -21,6 +23,9 @@ public class TaskService extends CrudService<TaskDto, Task> {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Autowired
     public TaskService(GenericMapper<TaskDto, Task> mapper, IRepository<Task, Long> repository) {
@@ -50,21 +55,17 @@ public class TaskService extends CrudService<TaskDto, Task> {
 
         if (dto.getOwnerId() == null) {
             dto.setOwnerId(foundTask.getOwnerId());
-            dto.setOwnerName(foundTask.getOwnerName());
 
         } else {
             var foundUser = userRepository.findById(dto.getOwnerId());
 
-            if (foundUser.isPresent()) {
-                dto.setOwnerId(foundUser.get().getId());
-                dto.setOwnerName(foundUser.get().getUsername());
-            }
+            foundUser.ifPresent(user -> dto.setOwnerId(user.getId()));
         }
 
         return super.update(id, dto);
     }
 
-    public List<TaskDto> listAllByOwnerName(String ownerName) {
-        return taskRepository.findAllByOwnerName(ownerName).stream().map(mapper::toDto).toList();
+    public List<TaskDto> listAllByOwner(UserDto owner) {
+        return taskRepository.findAllByOwner(userMapper.toEntity(owner)).stream().map(mapper::toDto).toList();
     }
 }

@@ -23,4 +23,6 @@ public class TeamDto extends BaseDto<Long> {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     List<UserDto> members = new ArrayList<>();
+
+    List<TaskDto> teamTasks = new ArrayList<>();
 }

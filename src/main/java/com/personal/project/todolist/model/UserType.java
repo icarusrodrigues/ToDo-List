@@ -14,5 +14,5 @@ public enum UserType {
     TEAM_ADMIN,
 
     //Team leader, where you have access to all team features
-    TEAM_LEADER,
+    TEAM_LEADER
 }

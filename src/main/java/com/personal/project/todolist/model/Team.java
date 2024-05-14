@@ -28,5 +28,8 @@ public class Team extends BaseEntity<Long> {
 
     @ManyToMany(mappedBy = "teams")
     private List<User> members;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
+    private List<Task> teamTasks;
 }
 

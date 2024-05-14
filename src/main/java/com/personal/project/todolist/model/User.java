@@ -47,6 +47,9 @@ public class User extends BaseEntity<Long>{
             inverseJoinColumns = @JoinColumn(name = "team_id"))
     private List<Team> teams;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
+    private List<Task> createdTasks;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
-    private List<Task> tasks;
+    private List<Task> ownedTasks;
 }

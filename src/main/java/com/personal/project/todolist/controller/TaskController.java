@@ -2,10 +2,12 @@ package com.personal.project.todolist.controller;
 
 import com.personal.project.todolist.dto.TaskDto;
 import com.personal.project.todolist.model.EnumMessage;
+import com.personal.project.todolist.model.TaskType;
 import com.personal.project.todolist.response.ResponseHandler;
 import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.ICrudService;
 import com.personal.project.todolist.service.TaskService;
+import com.personal.project.todolist.service.TeamService;
 import com.personal.project.todolist.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,9 @@ public class TaskController extends CrudController<TaskDto> {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TeamService teamService;
 
     @Autowired
     public TaskController(ICrudService<TaskDto> service) {
@@ -68,11 +74,12 @@ public class TaskController extends CrudController<TaskDto> {
     @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
 
         try {
             var foundTask = service.find(id);
 
-            if (foundTask.getOwnerName().equals(user.getUsername())) {
+            if (foundTask.getOwnerId().equals(foundUser.getId())) {
                 return ResponseHandler.generateResponse(super.getById(id), EnumMessage.GET_MESSAGE.message());
             } else {
                 return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message());
@@ -143,8 +150,9 @@ public class TaskController extends CrudController<TaskDto> {
     @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> listTasksByUser() {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
 
-        return ResponseHandler.generateResponse(ResponseEntity.ok().body(service.listAllByOwnerName(user.getUsername())), EnumMessage.GET_MESSAGE.message());
+        return ResponseHandler.generateResponse(ResponseEntity.ok().body(service.listAllByOwner(foundUser)), EnumMessage.GET_MESSAGE.message());
     }
 
     @Operation(summary = "Create Task", description = "Create a new Task in database.")
@@ -177,14 +185,42 @@ public class TaskController extends CrudController<TaskDto> {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var foundUser = userService.findByUsername(user.getUsername());
 
+        dto.setTaskType(TaskType.PERSONAL_TASK);
+        dto.setCreatedById(foundUser.getId());
         dto.setOwnerId(foundUser.getId());
-        dto.setOwnerName(foundUser.getUsername());
 
         try {
             return ResponseHandler.generateResponse(super.create(dto), EnumMessage.POST_MESSAGE.message());
 
-        } catch (ConstraintViolationException ignored) {
+        } catch (ConstraintViolationException | DataIntegrityViolationException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CONSTRAINT_VIOLATION_MESSAGE.message());
+        }
+    }
+
+    @PostMapping("/team/{teamId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
+    public ResponseEntity<?> createTeamTask(@PathVariable("teamId") Long teamId,
+                                             @RequestBody @Valid TaskDto dto) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
+
+        try {
+            var foundTeam = teamService.find(teamId);
+
+            if (foundTeam.getTeamLeaderId().equals(foundUser.getId()) || foundTeam.getAdmins().contains(foundUser) || foundTeam.getMembers().contains(foundUser)) {
+                dto.setTaskType(TaskType.TEAM_TASK);
+                dto.setCreatedById(foundUser.getId());
+                dto.setOwnerId(foundUser.getId());
+
+                dto.setTeamId(foundTeam.getId());
+
+                return ResponseHandler.generateResponse(super.create(dto), EnumMessage.POST_MESSAGE.message());
+
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
+            }
+        } catch (NoSuchElementException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
         }
     }
 
@@ -224,11 +260,12 @@ public class TaskController extends CrudController<TaskDto> {
     @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody TaskDto dto) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
 
         try {
             var foundTask = service.find(id);
 
-            if (foundTask.getOwnerName().equals(user.getUsername())) {
+            if (foundTask.getOwnerId().equals(foundUser.getId())) {
                 return ResponseHandler.generateResponse(super.update(id, dto), EnumMessage.PUT_MESSAGE.message());
             } else {
                 return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message());
@@ -259,11 +296,12 @@ public class TaskController extends CrudController<TaskDto> {
     @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
 
         try {
             var foundTask = service.find(id);
 
-            if (foundTask.getOwnerName().equals(user.getUsername())) {
+            if (foundTask.getOwnerId().equals(foundUser.getId())) {
                 return ResponseHandler.generateResponse(super.delete(id), EnumMessage.DELETE_MESSAGE.message());
             } else {
                 return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message());

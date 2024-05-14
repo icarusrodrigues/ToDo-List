@@ -78,7 +78,6 @@ public class AuthController {
             userDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
             userDto.setEmail(registerDto.getEmail());
             userDto.getUserTypes().add(UserType.PERSONAL);
-            userDto.setTasks(new ArrayList<>());
 
             return ResponseEntity.ok(userService.create(userDto));
 

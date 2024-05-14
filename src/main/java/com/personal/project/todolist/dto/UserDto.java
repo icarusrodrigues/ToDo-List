@@ -36,5 +36,7 @@ public class UserDto extends BaseDto<Long> {
     @EqualsAndHashCode.Exclude
     List<TeamDto> teams = new ArrayList<>();
 
-    List<TaskDto> tasks;
+    List<TaskDto> createdTasks = new ArrayList<>();
+
+    List<TaskDto> ownedTasks = new ArrayList<>();
 }
