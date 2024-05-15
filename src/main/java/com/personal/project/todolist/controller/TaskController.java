@@ -1,8 +1,10 @@
 package com.personal.project.todolist.controller;
 
 import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.exceptions.NotInTeamException;
 import com.personal.project.todolist.model.EnumMessage;
 import com.personal.project.todolist.model.TaskType;
+import com.personal.project.todolist.repository.TaskRepository;
 import com.personal.project.todolist.response.ResponseHandler;
 import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.ICrudService;
@@ -34,6 +36,9 @@ import java.util.NoSuchElementException;
 public class TaskController extends CrudController<TaskDto> {
     @Autowired
     private TaskService service;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     private UserService userService;
@@ -152,7 +157,28 @@ public class TaskController extends CrudController<TaskDto> {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var foundUser = userService.findByUsername(user.getUsername());
 
-        return ResponseHandler.generateResponse(ResponseEntity.ok().body(service.listAllByOwner(foundUser)), EnumMessage.GET_MESSAGE.message());
+        return ResponseHandler.generateResponse(ResponseEntity.ok(service.listAllByOwner(foundUser)), EnumMessage.GET_MESSAGE.message());
+    }
+
+    @GetMapping("/team/{teamId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
+    public ResponseEntity<?> listTasksByTeam(@PathVariable("teamId") Long teamId,
+                                             @RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
+                                             @RequestParam(name = "property", defaultValue = "dueDate") String property) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
+
+        try {
+            var foundTeam = teamService.find(teamId);
+
+            if (foundTeam.getTeamLeaderId().equals(foundUser.getId()) || foundTeam.getAdmins().contains(foundUser) || foundTeam.getMembers().contains(foundUser)) {
+                return ResponseHandler.generateResponse(ResponseEntity.ok(service.findByTeam(foundTeam)), EnumMessage.GET_MESSAGE.message());
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
+            }
+        } catch (PropertyReferenceException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
+        }
     }
 
     @Operation(summary = "Create Task", description = "Create a new Task in database.")
@@ -276,6 +302,37 @@ public class TaskController extends CrudController<TaskDto> {
         } catch (TransactionSystemException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CONSTRAINT_VIOLATION_MESSAGE.message());
         }
+    }
+
+    @PutMapping("/{taskId}/new-owner/{newOwnerId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
+    public ResponseEntity<?> changeTaskOwner(@PathVariable("taskId") Long taskId,
+                                             @PathVariable("newOwnerId") Long newOwnerId) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var loggedUser = userService.findByUsername(user.getUsername());
+
+        try {
+            var foundTask = service.find(taskId);
+
+            if (foundTask.getTaskType().equals(TaskType.PERSONAL_TASK)) {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), "This is not a Team Task!");
+            }
+
+            if (foundTask.getOwnerId().equals(loggedUser.getId())){
+                return ResponseHandler.generateResponse(ResponseEntity.ok(service.changeTaskOwner(newOwnerId, foundTask)), EnumMessage.PUT_MESSAGE.message());
+
+            } else {
+                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message());
+
+            }
+        } catch (NoSuchElementException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
+
+        } catch (NotInTeamException e) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), e.getMessage());
+
+        }
+
     }
 
     @Operation(summary = "Delete a Task", description = "Delete the entity with the provided ID.")

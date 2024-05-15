@@ -1,9 +1,11 @@
 package com.personal.project.todolist.service;
 
-
 import com.personal.project.todolist.dto.TaskDto;
+import com.personal.project.todolist.dto.TeamDto;
 import com.personal.project.todolist.dto.UserDto;
+import com.personal.project.todolist.exceptions.NotInTeamException;
 import com.personal.project.todolist.mapper.GenericMapper;
+import com.personal.project.todolist.mapper.TeamMapper;
 import com.personal.project.todolist.mapper.UserMapper;
 import com.personal.project.todolist.model.Task;
 import com.personal.project.todolist.repository.IRepository;
@@ -19,13 +21,22 @@ import java.util.List;
 public class TaskService extends CrudService<TaskDto, Task> {
 
     @Autowired
-    TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    UserMapper userMapper;
+    private UserService userService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private TeamMapper teamMapper;
 
     @Autowired
     public TaskService(GenericMapper<TaskDto, Task> mapper, IRepository<Task, Long> repository) {
@@ -67,5 +78,21 @@ public class TaskService extends CrudService<TaskDto, Task> {
 
     public List<TaskDto> listAllByOwner(UserDto owner) {
         return taskRepository.findAllByOwner(userMapper.toEntity(owner)).stream().map(mapper::toDto).toList();
+    }
+
+    public List<TaskDto> findByTeam(TeamDto teamDto) {
+        return taskRepository.findAllByTeam(teamMapper.toEntity(teamDto)).stream().map(mapper::toDto).toList();
+    }
+
+    public TaskDto changeTaskOwner(Long newOwnerId, TaskDto taskDto) throws NotInTeamException {
+        var newOwner = userService.find(newOwnerId);
+        var taskTeam = teamService.find(taskDto.getTeamId());
+
+        if (!taskTeam.getTeamLeaderId().equals(newOwnerId) && !taskTeam.getAdmins().contains(newOwner) && !taskTeam.getMembers().contains(newOwner)) {
+            throw new NotInTeamException("The new Owner must be a member of the Team '" + taskTeam.getName() + "'!");
+        }
+
+        taskDto.setOwnerId(newOwnerId);
+        return super.update(taskDto.getId(), taskDto);
     }
 }
