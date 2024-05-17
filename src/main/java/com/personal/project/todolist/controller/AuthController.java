@@ -8,7 +8,6 @@ import com.personal.project.todolist.response.ResponseHandler;
 import com.personal.project.todolist.security.jwt.JwtUtils;
 import com.personal.project.todolist.security.services.UserDetailsImpl;
 import com.personal.project.todolist.service.UserService;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 

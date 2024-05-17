@@ -20,7 +20,9 @@ public class EnumMessageTest {
                 EnumMessage.DELETE_MESSAGE,
                 EnumMessage.PROPERTY_NOT_FOUND_MESSAGE,
                 EnumMessage.CONSTRAINT_VIOLATION_MESSAGE,
-                EnumMessage.PROPERTY_NOT_FOUND_MESSAGE);
+                EnumMessage.PROPERTY_NOT_FOUND_MESSAGE,
+                EnumMessage.CANT_ACCESS_ENTITY_MESSAGE,
+                EnumMessage.DONT_HAVE_PERMISSION_MESSAGE);
 
         assertTrue(Arrays.stream(EnumMessage.values()).toList().containsAll(messages));
     }
@@ -34,5 +36,7 @@ public class EnumMessageTest {
         assertEquals(EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message(), "Entity not found!");
         assertEquals(EnumMessage.CONSTRAINT_VIOLATION_MESSAGE.message(), "Constraint violated!");
         assertEquals(EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message(), "Property not found in entity!");
+        assertEquals(EnumMessage.CANT_ACCESS_ENTITY_MESSAGE.message(), "You are not the owner of this entity!");
+        assertEquals(EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message(), "You don't have permission to do this!");
     }
 }

@@ -36,8 +36,10 @@ public class TaskTest {
     }
     @Test
     void testAllArgsConstructor() {
+        var user = new User();
+
         LocalDateTime now = LocalDateTime.now();
-        var task = new Task("some title", "some description", now);
+        var task = new Task("some title", "some description", now, TaskType.PERSONAL_TASK, user, user, null);
 
         assertEquals(task.getTitle(), "some title");
         assertEquals(task.getDescription(), "some description");

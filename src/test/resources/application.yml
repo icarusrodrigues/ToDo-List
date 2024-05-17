@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: test
   flyway:
     enabled: false
   datasource:
@@ -8,3 +10,7 @@ spring:
     password: sa
 hibernate:
   show_sql: true
+
+project:
+  jwtSecret: qsafikhtnfvnxpgrsowxiytmmxunumrxpzjwlukvncfaknsrneuftixyeyzzmdahvwpfwyvnyrfmbtsvrkhpathnpsdwdldblxentxrghadyoaeqnqqaqkxilwuaindh
+  jwtExpirationMs: 3600000

@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: develop
   application:
     name: todo-list
   flyway:
