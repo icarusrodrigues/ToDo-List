@@ -11,8 +11,6 @@ import com.personal.project.todolist.model.Team;
 import com.personal.project.todolist.model.UserType;
 import com.personal.project.todolist.repository.IRepository;
 import com.personal.project.todolist.repository.TeamRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +18,6 @@ import java.util.List;
 
 @Service
 public class TeamService extends CrudService<TeamDto, Team> {
-
-    private static final Logger log = LoggerFactory.getLogger(TeamService.class);
 
     @Autowired
     private TeamRepository repository;
@@ -46,8 +42,14 @@ public class TeamService extends CrudService<TeamDto, Team> {
         if (dto.getTeamLeaderId() == null)
             dto.setTeamLeaderId(foundTeam.getTeamLeaderId());
 
+        if (dto.getAdmins() == null)
+            dto.setAdmins(foundTeam.getAdmins());
+
         if (dto.getMembers() == null)
             dto.setMembers(foundTeam.getMembers());
+
+        if (dto.getTeamTasks() == null)
+            dto.setTeamTasks(foundTeam.getTeamTasks());
 
         return super.update(id, dto);
     }

@@ -172,7 +172,7 @@ public class TaskController extends CrudController<TaskDto> {
             var foundTeam = teamService.find(teamId);
 
             if (foundTeam.getTeamLeaderId().equals(foundUser.getId()) || foundTeam.getAdmins().contains(foundUser) || foundTeam.getMembers().contains(foundUser)) {
-                return ResponseHandler.generateResponse(ResponseEntity.ok(service.findByTeam(foundTeam)), EnumMessage.GET_MESSAGE.message());
+                return ResponseHandler.generateResponse(ResponseEntity.ok(service.listAllByTeam(foundTeam)), EnumMessage.GET_MESSAGE.message());
             } else {
                 return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
             }

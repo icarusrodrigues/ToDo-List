@@ -80,7 +80,7 @@ public class TaskService extends CrudService<TaskDto, Task> {
         return taskRepository.findAllByOwner(userMapper.toEntity(owner)).stream().map(mapper::toDto).toList();
     }
 
-    public List<TaskDto> findByTeam(TeamDto teamDto) {
+    public List<TaskDto> listAllByTeam(TeamDto teamDto) {
         return taskRepository.findAllByTeam(teamMapper.toEntity(teamDto)).stream().map(mapper::toDto).toList();
     }
 
