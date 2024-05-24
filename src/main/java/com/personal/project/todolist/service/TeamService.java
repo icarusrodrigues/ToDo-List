@@ -161,6 +161,15 @@ public class TeamService extends CrudService<TeamDto, Team> {
 
             userService.update(member.getId(), member);
         });
+
+        teamDto.getAdmins().forEach(admin -> {
+            admin.getManagedTeams().remove(teamDto);
+
+            if (admin.getManagedTeams().isEmpty())
+                admin.getUserTypes().remove(UserType.TEAM_ADMIN);
+
+            userService.update(admin.getId(), admin);
+        });
     }
 
     public void expelMemberFromTeam(Long memberId, TeamDto teamDto) throws NotInTeamException {
