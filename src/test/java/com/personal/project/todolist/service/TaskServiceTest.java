@@ -235,9 +235,9 @@ public class TaskServiceTest {
         task.setDueDate(now);
         task.setOwner(owner);
 
-        when(repository.findAllByOwner(owner)).thenReturn(List.of(task));
+        when(repository.findAllByOwner(owner, Sort.by(Sort.Direction.ASC, "dueDate"))).thenReturn(List.of(task));
 
-        var taskList = service.listAllByOwner(userMapper.toDto(owner));
+        var taskList = service.listAllByOwner(userMapper.toDto(owner), Sort.Direction.ASC, "dueDate");
 
         assertEquals(taskList.get(0).getId(), id);
         assertEquals(taskList.get(0).getTitle(), title);
@@ -265,9 +265,9 @@ public class TaskServiceTest {
         task.setDueDate(now);
         task.setTeam(team);
 
-        when(repository.findAllByTeam(team)).thenReturn(List.of(task));
+        when(repository.findAllByTeam(team, Sort.by(Sort.Direction.ASC, "dueDate"))).thenReturn(List.of(task));
 
-        var taskList = service.listAllByTeam(teamMapper.toDto(team));
+        var taskList = service.listAllByTeam(teamMapper.toDto(team), Sort.Direction.ASC, "dueDate");
 
         assertEquals(taskList.get(0).getId(), id);
         assertEquals(taskList.get(0).getTitle(), title);

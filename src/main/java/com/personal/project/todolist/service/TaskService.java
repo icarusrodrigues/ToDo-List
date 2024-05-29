@@ -12,6 +12,7 @@ import com.personal.project.todolist.repository.IRepository;
 import com.personal.project.todolist.repository.TaskRepository;
 import com.personal.project.todolist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -76,12 +77,12 @@ public class TaskService extends CrudService<TaskDto, Task> {
         return super.update(id, dto);
     }
 
-    public List<TaskDto> listAllByOwner(UserDto owner) {
-        return taskRepository.findAllByOwner(userMapper.toEntity(owner)).stream().map(mapper::toDto).toList();
+    public List<TaskDto> listAllByOwner(UserDto owner, Sort.Direction direction, String property) {
+        return taskRepository.findAllByOwner(userMapper.toEntity(owner), Sort.by(direction, property)).stream().map(mapper::toDto).toList();
     }
 
-    public List<TaskDto> listAllByTeam(TeamDto teamDto) {
-        return taskRepository.findAllByTeam(teamMapper.toEntity(teamDto)).stream().map(mapper::toDto).toList();
+    public List<TaskDto> listAllByTeam(TeamDto teamDto, Sort.Direction direction, String property) {
+        return taskRepository.findAllByTeam(teamMapper.toEntity(teamDto), Sort.by(direction, property)).stream().map(mapper::toDto).toList();
     }
 
     public TaskDto changeTaskOwner(Long newOwnerId, TaskDto taskDto) throws NotInTeamException {

@@ -153,11 +153,16 @@ public class TaskController extends CrudController<TaskDto> {
     })
     @GetMapping("/my-tasks")
     @PreAuthorize("hasAnyAuthority('PERSONAL', 'ADMIN', 'TEAM_LEADER', 'TEAM_ADMIN', 'TEAM_MEMBER')")
-    public ResponseEntity<?> listTasksByUser() {
+    public ResponseEntity<?> listTasksByUser(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
+                                             @RequestParam(name = "property", defaultValue = "dueDate") String property) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var foundUser = userService.findByUsername(user.getUsername());
 
-        return ResponseHandler.generateResponse(ResponseEntity.ok(service.listAllByOwner(foundUser)), EnumMessage.GET_MESSAGE.message());
+        try {
+            return ResponseHandler.generateResponse(ResponseEntity.ok(service.listAllByOwner(foundUser, direction, property)), EnumMessage.GET_MESSAGE.message());
+        } catch (PropertyReferenceException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
+        }
     }
 
     @GetMapping("/team/{teamId}")
@@ -172,7 +177,7 @@ public class TaskController extends CrudController<TaskDto> {
             var foundTeam = teamService.find(teamId);
 
             if (foundTeam.getTeamLeaderId().equals(foundUser.getId()) || foundTeam.getAdmins().contains(foundUser) || foundTeam.getMembers().contains(foundUser)) {
-                return ResponseHandler.generateResponse(ResponseEntity.ok(service.listAllByTeam(foundTeam)), EnumMessage.GET_MESSAGE.message());
+                return ResponseHandler.generateResponse(ResponseEntity.ok(service.listAllByTeam(foundTeam, direction, property)), EnumMessage.GET_MESSAGE.message());
             } else {
                 return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
             }
@@ -332,7 +337,6 @@ public class TaskController extends CrudController<TaskDto> {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), e.getMessage());
 
         }
-
     }
 
     @Operation(summary = "Delete a Task", description = "Delete the entity with the provided ID.")
