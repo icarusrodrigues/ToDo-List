@@ -8,7 +8,7 @@ Below are the steps to run the application on your machine:
 
 1. Clone the repository;
 2. Install PostgreSQL, configure it, and create a database with name "database" (or another name of your choice);
-3. In file [application.yml](https://github.com/icarusrodrigues/ToDo-List/blob/main/src/main/resources/application.yml) put your database credentials (user, password and name of database in url field if you create a database with another name);
+3. In file [application.yml](src/main/resources/application.yml) put your database credentials (user, password and name of database in url field if you create a database with another name);
 4. Run the application.
 
 > [!NOTE]  
@@ -26,7 +26,7 @@ And on each endpoint, you can see the type of response you might receive:
 
 ## Postman
 
-In the application there is also a [postman collection](https://github.com/icarusrodrigues/ToDo-List/blob/main/To_Do_List%20_Collection.postman_collection.json) with all endpoints.
+In the application there is also a [postman collection](To_Do_List%20_Collection.postman_collection.json) with all endpoints.
 
 ## Tests
 
